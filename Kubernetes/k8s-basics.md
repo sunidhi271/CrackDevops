@@ -185,3 +185,22 @@ Q: What role does DNS resolution play in inter-pod communication?
 - When a pod tries to connect to a URL, coreDNS resolves it to the remote IP and then sends traffic to it.
 - When a pod tries to connect to a svc in the same cluster then, it does - curl http://service.namespace.svc.cluster.local
 ```
+
+Q: What is the Horizontal Pod Autoscaler (HPA) in Kubernetes, and how does it work?
+```
+- It is a built in feature of Kubernetes which helps us to scale deployments/sts based on specified targets.
+- It relies on metrics-server to see cpu and memory.
+- If you have some custom metrics (like request rate, then that can be used to onfigure HPA)
+```
+
+Q: How can you secure communication within a Kubernetes cluster?  
+```
+- Using RBAC we can control a users/groups/serviceaccount access to a specific resource.
+- Using network policy we can control the inter pod interraction within the cluster.
+```
+
+Q: How do we implement is RBAC in Kubernetes cluster?
+- First create a service account:
+``` kubectl create serviceaccount my-service-account --namespace=my-namespace ```
+- Then create a role where we define the rules with resources(secrets, ingress, services) and verbs (get, list)
+- Then we bind the ROLE to a service account by creating a rolebinding, by mentioning the kind as service account, then name and ns of service account in the subjects. and we give reference of role (kind: Role, name and apiGroup of Role)
