@@ -7,6 +7,10 @@ This repo is a curated collection of common and frequently asked interview quest
 
 - **[Docker](./Docker)** – Questions and answers related to Docker concepts, commands, best practices, and troubleshooting.
 - **[Kubernetes](./Kubernetes)** – Covers key Kubernetes topics such as pods, services, deployments, networking, RBAC, and more.
+- **[CICD](./CICD)** - Interview Q&A on CI/CD tools like Jenkins, GitLab CI and pipeline design best practices.
+- **[Linux](./Linux)** - Linux OS, shell-based questions, file system navigation, permissions, process management, and command-line scenarios.
+- **[Monitoring](./Monitoring)** - Questions on tools like Prometheus, Grafana, Loki, Victoria Metrics, EKS, EKS, alerting setups, and observability strategies.
+- **[Scripting](./Scripting)** - Basic real-world shell and Python interview questions.
 
 ## ✅ Purpose
 
