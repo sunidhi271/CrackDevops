@@ -46,3 +46,11 @@ Ans:
 Volume:	Managed by Docker | Portable across environments | -v myvol:/data
 Bind Mount: Managed by USer |  Host-dependent | -v /host/path:/container/path
 ```
+Q: What are the different Docker networking types?
+Ans:
+| Type	  |   Use Case                            |
+|---------|---------------------------------------|
+| Bridge  |	Default, good for isolated containers |
+| Host	  |  Shares host’s network                |
+| Overlay	| Multi-host communication (Swarm)      |
+| None	  | Full network isolation                |
