@@ -7,7 +7,7 @@
 -  Questions to check Hands-on experience 
 
 
-## ✅ Basics
+### ✅ Basics
 Q: What is Docker and why is it used?
 ```
 Ans: Docker is a containerization tool that helps package applications with all dependencies, making them portable, lightweight, and consistent across environments.
