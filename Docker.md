@@ -149,11 +149,11 @@ docker rmi $(docker images -aq)
 ```
 Q: How to copy a file into a container?
 ```
-A: docker cp file.txt my_container:/app/
+Ans: docker cp file.txt my_container:/app/
 ```
 Q: How to check Docker service status?
 ```
-Ana: systemctl status docker
+Ans: systemctl status docker
 ```
 Q: How to use secrets securely during build?
 ```
