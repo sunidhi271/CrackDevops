@@ -1,4 +1,5 @@
 # 🐳 Docker – DevOps Interview Prep
+A comprehensive list of Docker questions with answers, for interviews and deep dives.
 
 📚 Table of Contents
 -  [Basics](https://github.com/sunidhi271/DevopsInterviewQuestions/blob/main/Docker/docker-Basics.md)
