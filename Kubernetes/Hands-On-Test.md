@@ -55,3 +55,15 @@ spec:
     - Ingress
 ```
 
+Q: What is the use of kubectl autoscale command ?
+```
+- kubectl autoscale: This command enables autoscaling for a deployment or a replica set based on avg CPU utilization by all pods.
+- It allows you to dynamically adjust the number of replicas based on load.
+```
+
+Q: Write a kubectl command to autoscale a deployment from 2 to 5 replicas and set the target average CPU utilization percentage for the autoscaler to 80%.
+```
+k autoscale deployment grafana --min=2 max=5 --cpu-percent=80
+```
+
+
