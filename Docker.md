@@ -1,10 +1,10 @@
 # 🐳 Docker – DevOps Interview Prep
 
 📚 Table of Contents
--  Basics
--  Dockerfile Instructions 
--  Docker Best Practices
--  Questions to check Hands-on experience 
+-  [Basics](https://github.com/sunidhi271/DevopsInterviewQuestions/blob/main/Docker.md#-basics)
+-  [Dockerfile Instructions](https://github.com/sunidhi271/DevopsInterviewQuestions/blob/main/Docker.md#-dockerfile-instructions)
+-  [Docker Best Practices](https://github.com/sunidhi271/DevopsInterviewQuestions/blob/main/Docker.md#-docker-best-practices)
+-  [Questions to check Hands-on experience](https://github.com/sunidhi271/DevopsInterviewQuestions/blob/main/Docker.md#-questions-to-check-hands-on-experience)
 
 
 #### ✅ Basics
