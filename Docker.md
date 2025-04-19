@@ -7,7 +7,7 @@
 -  Questions to check Hands-on experience 
 
 
-### ✅ Basics
+#### ✅ Basics
 Q: What is Docker and why is it used?
 ```
 Ans: Docker is a containerization tool that helps package applications with all dependencies, making them portable, lightweight, and consistent across environments.
@@ -57,7 +57,7 @@ Bind Mount: Managed by USer |  Host-dependent | -v /host/path:/container/path
 ```
 
 
-## 🌿 Dockerfile Instructions 
+#### 🌿 Dockerfile Instructions 
 Q: What is the difference between CMD and ENTRYPOINT in Dockerfile?
 ```
 Ans:
@@ -89,7 +89,7 @@ Ans:
 
 
 
-## 🧱 Docker Best Practices
+#### 🧱 Docker Best Practices
 Q: What is a multistage Docker build? 
 ```
 Ans: A multistage Docker build is a Dockerfile technique where you use multiple FROM statements to define different stages in the build process.
@@ -125,7 +125,7 @@ Ans:
 - Use COPY over ADD
 ```
 
-## 📝 Questions to check Hands-on experience 
+#### 📝 Questions to check Hands-on experience 
 Q: How to write a basic Dockerfile to print "Hello World"?
 Ans: 
 Dockerfile:
