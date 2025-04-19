@@ -1,10 +1,10 @@
 # 🐳 Docker – DevOps Interview Prep
 
 📚 Table of Contents
-## ✅ Basics
-## 🌿 Dockerfile Instructions 
-## 🧱 Docker Best Practices
-## 📝 Questions to check Hands-on experience 
+-  Basics
+-  Dockerfile Instructions 
+-  Docker Best Practices
+-  Questions to check Hands-on experience 
 
 
 ## ✅ Basics
