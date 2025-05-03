@@ -66,4 +66,21 @@ Q: Write a kubectl command to autoscale a deployment from 2 to 5 replicas and se
 k autoscale deployment grafana --min=2 max=5 --cpu-percent=80
 ```
 
+Q: How to check logs of mutiple pods using one single k8s command ?
+```
+- We can do that if mutiple pods have same selector/labels in them using the below command as example:
+kubectl logs -l run=pingpong --tail 1
+- tail 1 means it shows the last line of logs of each pod.
+```
+
+Q: Run 4 replicas of elasticsearch container (image = elasticsearch:2.1) using kubectl command ?
+```
+kubectl run elastic --image=elasticsearch:2 --replicas=4
+kubectl get pods -w
+```
+
+Q: There is a deployment named "elastic", create a default ClusterIP service exposing its port 9200 using one single kubectl command ?
+```
+kubectl expose deployment/elastic --port 900
+```
 
