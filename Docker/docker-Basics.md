@@ -35,6 +35,21 @@ Ans:
 - Uses cgroups for limiting resources
 - Shares the host kernel, no OS overhead
 ```
+Q: Can you explain what happens internally when you run docker run hello-world? What components are involved?
+```
+- docker run is executed by Docker CLI (client).
+- The CLI sends a REST API request to the Docker Daemon (dockerd) over Unix socket (or TCP socket or /var/run/docker.sock).
+- Docker Daemon checks if the hello-world image exists locally.
+- If not found (first time), Docker daemon pulls it from Docker Hub (default registry).
+- Docker daemon pulls the image layers from Docker Hub.
+- Stores them in the local image cache (/var/lib/docker storage directory, or containerd store).
+- Docker daemon creates a new container object using the hello-world image.
+- Docker daemon allocates, containerID, Filesystem, Networking (bridge network by default), cgroups (for resource limits), namespaces (for isolation).
+- Docker invokes containerd and runc to start the container process.
+- runc creates the container using the OCI specification (Sets up namespaces and cgroups, Mounts the filesystem layers, Applies networking, Starts the container's entrypoint)
+- Container process started and docker daemon captures stdout/stderr of the container process. 
+```
+
 Q: Difference between Docker container and VM ?
 ```
 Docker:	Shares host kernel | Starts in seconds | Lightweight
