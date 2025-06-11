@@ -16,3 +16,14 @@ Ans: If a container is restarting repeatedly after being run, and I cannot modif
 6. Mount external volume to check internal logs/configuration files - Sometimes, the app may generate internal logs to files. 
 I can mount volumes to extract those logs: docker run -v /host/log/dir:/container/log/dir <image>
 7. Override entrypoint to run the container for sometime to debug: docker run -it --entrypoint /bin/sh <image>
+
+
+Q: What happens when you bind mount a host directory into a container(during build time) where the directory already exists with data? Will the container’s files persist ?
+- The host directory takes precedence — Docker will mount the host directory over the container directory.
+- The existing data inside the container at that mount path will be hidden (masked), not merged.
+- The container’s existing files at that path still exist inside the image, but they are not accessible while the mount is active.
+- Its not possible to mount a directory to a container when it is running. Even when we mount a new volume to a deployment, then it will restart the pod.
+- Only during the build time it is possible to mount the volume.
+
+
+
