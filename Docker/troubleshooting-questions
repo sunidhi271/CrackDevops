@@ -1,0 +1,18 @@
+Q)  If a container restarts repeatedly after being run, how would you identify the root cause without modifying the Dockerfile ?
+
+Ans: If a container is restarting repeatedly after being run, and I cannot modify the Dockerfile, I would follow a systematic debugging approach using external tools and runtime analysis:
+1. Check container logs: docker logs <container_id>
+2. Check exit code: docker inspect <container_id> --format='{{.State.ExitCode}}'
+- Exit code 0 - sucessful pod creation,
+- Exit code 1 -  out-of-memory,
+- Exit code 137 - OOM Killed - in this case I will check the resource limits on docker or k8s side. (docker stats <containerId>)
+- Exit code 139 - application crashes
+3. Check environment variables and configurations 
+4. Check Network Dependencies - application depends on external services (DB, API, etc.), ensure network connectivity is working.
+5. If container fails after running for sometime, Use an interactive shell - docker run -it --entrypoint /bin/sh <image>
+- check logs of container
+- check the permissions of files
+- check config files
+6. Mount external volume to check internal logs/configuration files - Sometimes, the app may generate internal logs to files. 
+I can mount volumes to extract those logs: docker run -v /host/log/dir:/container/log/dir <image>
+7. Override entrypoint to run the container for sometime to debug: docker run -it --entrypoint /bin/sh <image>
