@@ -1,0 +1,9 @@
+Q) Tell me about your work experience ?
+
+Hi, I’m <>, and I have around <> years of experience in DevOps with a strong focus on Site Reliability Engineering, and a good hands on in Cloud Infrastructure.
+Currently, I’m part of the <Devops/SRE> team at <>, where I work on managing jenkins pipelines, deploying and managing microservices in On Premises and AWS EKS using GitOps tools like ArgoCD, Helm, and GitLab CI. 
+I’ve set up a complete observability stack using Prometheus, Grafana, Loki, and VictoriaMetrics to monitor availability and system health.
+I also handle incident response, automate routine tasks with Python and Bash, and ensure security compliance using tools like OPA Gatekeeper and Sealed Secrets.
+Earlier at <>, I worked on CI/CD pipelines, infrastructure automation using Terraform and ARM templates, and cloud deployments on AWS and Azure.
+
+I enjoy building reliable systems, automating processes, and collaborating with teams to improve service uptime and performance.
