@@ -89,6 +89,31 @@ Q: What is difference between Deployment, StatefulSet and DaemonSet ?
 | Scale Order  | Parallelly, in rolling update (one pod replaces the other)                | Sequentially                 | new pod gets added on node addition             |
 | Re-Scheduling| New Pod Name             | Same Pod Name           | On new node               |
 
+Q: What is the difference between a Pod, ReplicaSet, Deployment, and StatefulSet?
+```
+1. Pod
+Definition: The smallest and simplest unit in Kubernetes.
+Contains: One or more containers that share storage, network, and a specification.
+Use Case: Used as the building block, but not recommended to be created directly for production workloads.
+Limitation: If it crashes, it won't be automatically recreated unless managed by a higher-level object like a ReplicaSet or Deployment.
+
+2. ReplicaSet
+Definition: A controller that ensures a specified number of pod replicas are running at all times.
+Key Role: Maintains the desired count of identical Pods.
+Use Case: Usually used indirectly through a Deployment.
+Limitation: Doesn’t support rolling updates or version history by itself.
+
+3. Deployment
+Definition: A higher-level abstraction that manages ReplicaSets and provides declarative updates for Pods.
+Key Features: Rolling updates and rollbacks | Automatically replaces failed Pods | Version history for rollbacks.
+Use Case: Preferred for stateless applications like web servers, APIs, etc.
+
+4. StatefulSet
+Definition: Like a Deployment but for stateful applications that require stable network identity, persistent storage, and ordered deployment.
+Key Features: Each pod gets a unique, stable hostname (e.g., pod-0, pod-1). | Persistent volume claims are retained even if the pod is deleted. | Supports ordered start, stop, and scaling.
+Use Case: Databases (e.g., MySQL, Cassandra), message queues, or other apps needing persistent identity and storage.
+```
+
 Q: How does Kubernetes handle high availability for microservices ?
 ```
 - Rolling updates, auto healing
