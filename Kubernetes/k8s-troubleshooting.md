@@ -27,6 +27,14 @@ Q: What challenges might you encounter during the installation of a Kubernetes c
 - kubelet startup issues
 ```
 
+Q: What happens when a pod exceeds its memory limit?
+```
+If a container uses more memory than its declared limit, the Kubelet immediately kills the container.
+The termination reason is: OOMKilled (Out Of Memory Killed)
+If a container tries to allocate more RAM than allowed, the Linux kernel OOM killer steps in and kills the offending process.
+If managed by a Deployment/ReplicaSet, Kubernetes will automatically restart the pod.
+If it's a one-off pod, it stays in the CrashLoopBackOff or Failed state.
+```
 
 Q: What happens when there is a resource constraint or if a node is tainted? 
 ```
