@@ -229,3 +229,10 @@ Q: How do we implement is RBAC in Kubernetes cluster?
 ``` kubectl create serviceaccount my-service-account --namespace=my-namespace ```
 - Then create a role where we define the rules with resources(secrets, ingress, services) and verbs (get, list)
 - Then we bind the ROLE to a service account by creating a rolebinding, by mentioning the kind as service account, then name and ns of service account in the subjects. and we give reference of role (kind: Role, name and apiGroup of Role)
+
+Q: What is difference between Cordon and Drain commands in kubernetes ?
+```
+"cordon" and "drain" are commands used to manage nodes during maintenance or upgrades.
+- "Cordon" marks a node as unschedulable, preventing new pods from being scheduled on it, while the already running pods still keep running on it.
+- Drain" evicts all pods from the node before marking it as unschedulable, ensuring a graceful transition of workloads. 
+```
