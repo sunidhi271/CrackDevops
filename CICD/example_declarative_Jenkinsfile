@@ -25,10 +25,14 @@ pipeline {
                 }
             }
         }
-
         stage('Archive Artifact') {
             steps {
                 archiveArtifacts artifacts: 'build/*.txt', allowEmptyArchive: true
+            }
+        }
+        stage('Release tag') {
+            steps {
+                build job: "release_Job", parameter: [string(name: 'currentbranch', value: ${gitlabTargetBranch})], propagate: true, wait: true
             }
         }
     }
