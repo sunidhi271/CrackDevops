@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+      
+    options {
+        timestamps()
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/sunidhi271/my-repo.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    try {
+                        echo 'Building...'
+                        sh 'mkdir -p build && echo "Hello World" > build/output.txt'
+                    } catch (err) {
+                        echo "Build failed: ${err}"
+                        currentBuild.result = 'FAILURE'
+                        error("Stopping pipeline due to build failure.")
+                    }
+                }
+            }
+        }
+
+        stage('Archive Artifact') {
+            steps {
+                archiveArtifacts artifacts: 'build/*.txt', allowEmptyArchive: true
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo "Pipeline failed! Check the logs."
+        }
+        success {
+            echo "Pipeline completed successfully."
+        }
+    }
+}
