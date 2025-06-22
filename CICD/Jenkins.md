@@ -38,7 +38,7 @@ Q). Stages of pipeline ?
 ```
 NOD Pipeline:
 - Trigger pipeline: checks whether its a MR or direct commit to master(by checking MR id env variable), the state of MR (env.gitlabMergeRequestState). Then once merged or commited, it makes a list of changes files and extracts the top level folder names. Then it matches the folder names with the list of folder names given and triggers jenkins job for the matched folder sequentially (wait: true), by passing branch name as parameter. It succeeds if child jobs were triggered and fails if no folder changes.
-- Build Pipeline: Clone stage clones the repository and cd to topFolder or microservice folder, then runs dockerfile linter. Build stage builds the app by making the build number as the tag number, then pushes the image to registry and runs a Anchire scan on the pushed image. Next stage is SQ scan which checks sonar settings and then runs scan and waits for quality gate. At the end cleans up the workspace.
+- Build Pipeline: Clone stage - clones the repository and cd to topFolder or microservice folder, then runs dockerfile linter. Build stage - builds the app by making the build number as the tag number, then pushes the image to registry and runs a Anch0re scan on the pushed image. Last stage -  is SQ scan which checks sonar settings and then runs scan and waits for quality gate. At the end cleans up the workspace.
 - Release pipeline: another trigger pipeline checks MRs state and triggers the release pipeline once MR is merged. First is ImageCheck stage in which gitlab repo is cloned and its value file is read and the image versions of each image is extracted and a final file is prepared which has registry prefixed with image:tag, and then it logins to registry and checks the availablility of each image in the registry. Second stage is git repo tagging, in which it calls a function which returns a tag name and another function which creates the tag and pushes it in the remote repo through gitlab api. 
 ```
 Q). How to backup Jenkins ?
@@ -61,9 +61,12 @@ rsync command:
 ```
 Q). What is the deployment and cicd flow in your current company ?
 ```
-
+- Trigger build: There is a repo where the code of more than 30 microservices are maintained, each ms separated by folder name inside the repo. Whenever there is a MR Raised, a build trigger pipeline gets triggered which observes the state of the MR and when its merged, it observes or lists the changed files. From the changed files it scrape the unique list of top folders, and then matches the topFolder names with a list of allowed microservices. For matched folder name it triggers the pipeline of the respective microservice.
+- Build pipeline: First stage - Clones the branch of that repo and then runs dockerfile linter. Second stage - builds the app by making the build number as the tag number, then pushes the image to registry and runs a Anchore scan on the pushed image. Third stage - SQ scan which checks sonar settings and then runs scan and waits for quality gate. Fourth stage - updates the dev value file in another repo where helm templates of the ms are maintained. 
+- Argocd - Observes the changes, and applies the changes directly in cluster.
+- Weekly release - each commit or MR to the green branch of template repo or value file repo, creates a tag. A final tag is picked manually and applied to preproduction value file. This tag application then triggers a gitlab-ci pipeline which creates a list of images that are going as part of the release in - stage 1. In stage 2 - It extracts only unique list of images that are coming from our private registry and is validating their existance in our repistry. Release fails when tags are not present in registry. Stage -3: The unique list is pushed to another gitlab repo for Operations team reference. Stage-4: The gitlab code of microservice template repo, value file repo, and infra repo is synced to Customer gitlab.
+Release tag is first applied to small DCs, and the next day it is applied to big DCs.
 ```
-
 Q). What is shared libraries in jenkins? and How are shared libraries written?
 
 Q). What is typical structure of shared libraries ?
@@ -79,6 +82,16 @@ Q). Are you aware of security scanning tools?
 - Clair:
 - Blackduck:
 - Talko:
+
+Q) How sonarqube works ?
+
+Q) How to store secrets in jenkins ?
+
+Q) How to debug a slow pipeline ?
+
+Q) Explain challenging CICD issues you fixed ?
+
+Q) How to implement monitoring and alerting post deployment ?
 
 Q). storing the secrets?
 
