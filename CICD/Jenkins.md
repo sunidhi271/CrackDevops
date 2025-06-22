@@ -36,37 +36,49 @@ Jenkins receives the payload, matches it to the corresponding job, and triggers 
 ```
 Q). Stages of pipeline ?
 ```
-1. 
+NOD Pipeline:
+- Trigger pipeline: checks whether its a MR or direct commit to master(by checking MR id env variable), the state of MR (env.gitlabMergeRequestState). Then once merged or commited, it makes a list of changes files and extracts the top level folder names. Then it matches the folder names with the list of folder names given and triggers jenkins job for the matched folder sequentially (wait: true), by passing branch name as parameter. It succeeds if child jobs were triggered and fails if no folder changes.
+- Build Pipeline: Clone stage clones the repository and cd to topFolder or microservice folder, then runs dockerfile linter. Build stage builds the app by making the build number as the tag number, then pushes the image to registry and runs a Anchire scan on the pushed image. Next stage is SQ scan which checks sonar settings and then runs scan and waits for quality gate. At the end cleans up the workspace.
+- Release pipeline: another trigger pipeline checks MRs state and triggers the release pipeline once MR is merged. First is ImageCheck stage in which gitlab repo is cloned and its value file is read and the image versions of each image is extracted and a final file is prepared which has registry prefixed with image:tag, and then it logins to registry and checks the availablility of each image in the registry. Second stage is git repo tagging, in which it calls a function which returns a tag name and another function which creates the tag and pushes it in the remote repo through gitlab api. 
 ```
 Q). How to backup Jenkins ?
 ```
 Backing up Jenkins is a very easy process, there are multiple default and configured files and folders in Jenkins that you might want to backup. The backup can be taken and stored in another directory or that directory can be zipped and stored in s3. Below are the main things that I backup:
-1. Configuration: The `~/.jenkins` folder. You can use a tool like rsync to backup the entire directory to another location.
+1. Configuration: 
+- The `~/.jenkins` folder. You can use a tool like rsync to backup the entire directory to another location.
+- /var/lib/jenkins/nodes folder for the Jenkins node configurations
+- /var/lib/jenkins/*.ssh files
+- /var/lib/jenkins/*.kube files
 2. Plugins: Backup the plugins installed in Jenkins by copying the plugins directory located in JENKINS_HOME/plugins to another location.
 3. Jobs: Backup the Jenkins jobs by copying the jobs directory located in JENKINS_HOME/jobs to another location.
+4. Secrets: Backup all the secrets stored to your folder (/var/lib/jenkins/secret* files)
+5. Copy all the xmls: /var/lib/jenkins/*.xml files
 
 rsync command:
 1. rsync -a -r -p -A -X -o -g -t -a -v -h -z --progress --delete --exclude=logs --exclude=workspace --exclude=microservice --exclude=scm-sync-configuration -e ssh /var/lib/jenkins/. root@$HOST:/var/lib/jenkins ) >> /tmp/RSYNCLog-$time.log 2>&1
 2. rsync -a -r -p -A -X -o -g -t -a -v -h -z --progress -e ssh /etc/sysconfig/jenkins root@$HOST:/etc/sysconfig/jenkins
-3. 
 
 ```
-7. shared libraries in jenkins?
-8. how do we define shared libraries?
-9. how are shared libraries written?
-10. how do you define a pipeline and call it?
-11. what kind of app you deploy on the pipeline?
-12. basic structure, folder structure of helm?
-13. what command are you using deployment in helm
-14. in the Jenkins pipeline, the pipeline is running successfully but the build is not happening, what are the issues?
-15. typical deployment flow?
-cicd workflow?
-16. how do we do a full quality check?
-17. jenkins file, different stages...
-18. shared libraries in jenkins file?
-19. typical structure of shared libraries...
-20. are you aware of security scanning tools?
-21. how do you pass the environment variables on docker build command.
-22. any extension you are using for image scanning?
-23. storing the secrets?
-24. what is helm chart signing?
+Q). What is the deployment and cicd flow in your current company ?
+```
+
+```
+
+Q). What is shared libraries in jenkins? and How are shared libraries written?
+
+Q). What is typical structure of shared libraries ?
+
+Q). in the Jenkins pipeline, the pipeline is running successfully but the build is not happening, what are the issues?
+ 
+Q). how do we do a full quality check?
+
+Q). Are you aware of security scanning tools?
+- SonarQube:
+- Trivy:
+- Anchore:
+- Clair:
+- Blackduck:
+- Talko:
+
+Q). storing the secrets?
+
