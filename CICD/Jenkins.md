@@ -74,9 +74,9 @@ Shared Libraries in Jenkins are a way to centralize and reuse common pipeline co
 - Scroll to Global Pipeline Libraries
 - Add the library details (branch, repo url, retrival method scm)
 OR, folder level libraries can also be created, i.e, pipelines under the same folders can use it.
-
-Click Add
 ```
+
+Q). What is typical structure of shared libraries ?
 ```
 (root of Git repo)
 ├── vars/
@@ -88,15 +88,18 @@ Click Add
 ├── resources/
 │   └── someTemplate.txt        ← Templates or configs
 └── README.md
+
+| Folder       | Purpose                                    | Simple Example                          |
+| ------------ | ------------------------------------------ | --------------------------------------- |
+| `vars/`      | Simple reusable functions (like `build() | cleanup()`) |  `deployApp()`              |
+| `src/`       | Helper classes, complex logic              | `Helper.shout("hi")`                    |
+| `resources/` | Static files, templates                    | `libraryResource("email-template.txt")` |
+
 ```
 
-Q). What is typical structure of shared libraries ?
+# Security implementations in Jenkins 
 
-Q). in the Jenkins pipeline, the pipeline is running successfully but the build is not happening, what are the issues?
- 
-Q). how do we do a full quality check?
-
-Q). Are you aware of security scanning tools?
+Q) Are you aware of security scanning tools? 
 - SonarQube:
 - Trivy:
 - Anchore:
@@ -106,13 +109,41 @@ Q). Are you aware of security scanning tools?
 
 Q) How sonarqube works ?
 
+Q). How do we do a full quality check ?
+
 Q) How to store secrets in jenkins ?
+```
+- In jenkins UI, Go to Manage Jenkins --> Credentials
+- Choose the appropriate domain (e.g., global or a folder-specific one) and Click "Add Credentials"
+- Below are the different secret types and give a meaningful secret ID for recognizing:
+| Type                              | Use Case Example                      |
+| --------------------------------- | ------------------------------------- |
+| **Secret text**                   | API tokens, passwords, access keys    |
+| **Username with password**        | Login credentials                     |
+| **SSH Username with private key** | Git access, remote SSH                |
+| **Secret file**                   | Upload a file (e.g., `.p12`, `.json`) |
+- Jenkins encrypts secrets in its internal storage and masks the secrets (***), so they dont get leaked.
+- Always use credentialsId — it's how Jenkins looks up the secret.
+```
+
+Q) How to use username credential in jenkinsfile ?
+```
+pipeline {
+  agent any
+  stages {
+    stage('Login to Registry') {
+      withCredentials([usernamePassword(credentialId: 'HarborPassword', username: 'ROBOT', password: 'TOKEN')]){
+        sh docker login registry.dac.nokia.com -u ${ROBOT} -p {TOKEN}
+      }
+    }
+  }
+}
+```
+
+# Troubleshooting Knowledge
+Q) Explain challenging CICD issues you fixed ?
 
 Q) How to debug a slow pipeline ?
 
-Q) Explain challenging CICD issues you fixed ?
-
-Q) How to implement monitoring and alerting post deployment ?
-
-Q). storing the secrets?
+Q). In the Jenkins pipeline, the pipeline is running successfully but the build is not happening, what are the issues?
 
