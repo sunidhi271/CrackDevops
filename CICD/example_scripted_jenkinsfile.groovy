@@ -14,6 +14,10 @@ node {
             archiveArtifacts artifacts: 'build/*.txt', allowEmptyArchive: true
         }
 
+        stage('Trigger the other job') {
+            build job: 'release_pipeline', parameters: [string(name: 'currentbranch' , value: 'env.gitlabTargetBranch')], propagate: false, wait: true
+        }
+
     } catch (err) {
         echo "Error occurred: ${err}"
         currentBuild.result = 'FAILURE'
