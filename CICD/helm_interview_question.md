@@ -1,5 +1,29 @@
-Q) basic structure, folder structure of helm?
+Q): basic structure, folder structure of helm?
+```
+mychart/
+├── Chart.yaml
+├── values.yaml
+├── charts/
+├── templates/
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── ingress.yaml
+│   └── _helpers.tpl
+└── README.md (optional)
+```
+
 Q) what command are you using deployment in helm ?
+```
+- helm template . <release-name> --namespace abc -f values.yaml --set .Values.image.registry=registry.private.com
+- helm template . <my-release> --namespace daas -f values.yaml --set .Values.key=1 --show-only templates/deployment.yaml
+- helm install . <release-name> --namespace abc -f values.yaml
+- helm install . <release-name> --dry-run --namespace abc -f values.yaml --out-dir /root/out.yaml
+- helm rollback <release-name> 2 --dry-run --out-dir /root/out.yaml
+- helm rollback <release>
+- helm history <release-name>
+- helm diff upgrade my-release . --values values.yaml (shows diff b/w what is there currently running in cluster with the chart o/p and shows what will change in helm upgrade.
+```
+  
 Q) what is helm chart signing?
 
 Q: How can you pass custom values to a Helm chart when deploying it?
