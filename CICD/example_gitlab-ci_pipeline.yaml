@@ -1,0 +1,41 @@
+workflow:
+  name: "Release Pipeline"
+  
+stages:
+  - Build  
+  - SyncCode
+  - ReleaseTag
+  
+jenkins_cicd:
+  image: alpine:latest
+  stage: Build
+  script:
+    - echo "Waiting for jenkins to create a tag before starting"
+    - sleep 300
+  when: on_success
+  only:
+    - main
+    
+sync_code:
+  image: registry.dac.nokia.com/public/alpine-git:1.0
+  stage: SyncCode
+  needs: 
+    - jenkins_cicd
+  script:
+    - git checkout main
+    - git pull origin main
+    - git push https://${ENV_TARGET_GIT_USER}:${ENV_TARGET_GIT_TOKEN}@git.dac.nokia.com/nod/oss-mediator-deployments.git main:main
+  only:
+    - main
+
+sync_tags:
+  image: registry.dac.nokia.com/public/alpine-git:1.0
+  stage: Release
+  needs:
+    - sync_main
+  script:
+    - echo "Tag name:" ${CI_COMMIT_REF_NAME}
+    - git fetch origin --tags
+    - git push https://${ENV_TARGET_GIT_USER}:${ENV_TARGET_GIT_TOKEN}@git.dac.nokia.com/nod/oss-mediator-deployments.git tag wk* --force
+  only:
+    - tags
