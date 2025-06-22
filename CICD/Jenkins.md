@@ -100,16 +100,41 @@ Q). What is typical structure of shared libraries ?
 # Security implementations in Jenkins 
 
 Q) Are you aware of security scanning tools? 
-- SonarQube:
-- Trivy:
-- Anchore:
-- Clair:
-- Blackduck:
-- Talko:
-
+```
+- SonarQube: It scans the source code for bugs, duplications, security issues, and finds out bas coding practices. Its more useful from development point of view. It is mainly for code quality and security.
+- Trivy: Scans your container images, OS Packages, dependecies and libraries used for security vulnerabilities (CVEs). It is mainly for finding vulnerabilities and CVEs.
+- Clair: Finds vulnerabilities in container images by checking their contents.
+- Anchore: Finds out security vulnerabilities on container images.
+- Blackduck: Detects open-source risks and license issues in your software.
+```
 Q) How sonarqube works ?
+```
+- After we run sonar scanner on the source code, it analyses the code on the server.
+- After scanning, the data is send to SonarQube server, via HTTP API.
+- Sonarqube server store data in db and processes data to compute different metrics on different parameters like
+  security vulnerability, code best practicies, duplications, bugs, in percentage.
+- SQ Applies rules (what to check in code), that are coding standards or conditions that SonarQube uses to analyze your code. You can enable, disable, or customize rules in SonarQube.
+- SQ generate Quality gates (a set of thresholds/conditions that your code must meet to "pass" the analysis.) like Security rating, maintainability rating, Code coverage (Unit test coverage must be high enough).
+- If the code fails the Quality Gate then build pipeline should fail, so that developers can rewrite the code to make it better.
+- User can see the reports in Sonarqube dashboard.
+```
+command:
+```
+sonar-scanner \
+  -Dsonar.projectKey=<your-project-key> \
+  -Dsonar.sources=. \
+  -Dsonar.host.url=http://<your-sonarqube-url> \
+  -Dsonar.login=<your-token>
 
+```
 Q). How do we do a full quality check ?
+```
+1. Run Unit Tests: Ensure that the code logic is tested.
+2. Static code analysis: Enforce quality gates with SonarQube analysis (bugs, security checks, code best practicies check, code coverage etc)
+3. Security Scan: Scan dependencies and libraries for licensing issues using Black Duck.
+4. Run Integration Tests: Run all components together to check whether everything is working well in dev clusters.
+5.  Block Pipeline on Quality Gate Failure
+```
 
 Q) How to store secrets in jenkins ?
 ```
@@ -144,6 +169,32 @@ pipeline {
 Q) Explain challenging CICD issues you fixed ?
 
 Q) How to debug a slow pipeline ?
+- Enable timestamps in log or manually log it:
+```
+pipeline {
+    options {
+        timestamps()
+    }
+    stages {
+      stage {
+        def start = System.currentTimeMillis()
+        sh 'mvn clean package'
+        def end = System.currentTimeinMillis()
+        echo "Build took ${(end - start) / 1000} seconds"
+      }
+    }
+}
+```
+- Check real time resource consumption by Jenkins agents. You can use jenkins node monitoring plugins, or htop etc to monitor nodes.
+-  Check for Queuing Delays (lack of enough agents)
+- Check Logs for Errors or Warnings
+- Use Parallel Stages Where Possible
 
-Q). In the Jenkins pipeline, the pipeline is running successfully but the build is not happening, what are the issues?
+Q) In the Jenkins pipeline the pipeline is running successfully but the build is not happening, what are the issues ?
+```
+- Missing build step in Jenkinsfile.
+- A build step is wrapped in a condition that’s not met.
+- Build Command Fails Silently, because there is no error tracking for build failure.
+- Artifacts Not Being Produced. Build is happening but the expected file is not being saved. Use archiveArtifacts to capture outputs.
+```
 
