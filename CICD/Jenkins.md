@@ -44,6 +44,12 @@ Backing up Jenkins is a very easy process, there are multiple default and config
 1. Configuration: The `~/.jenkins` folder. You can use a tool like rsync to backup the entire directory to another location.
 2. Plugins: Backup the plugins installed in Jenkins by copying the plugins directory located in JENKINS_HOME/plugins to another location.
 3. Jobs: Backup the Jenkins jobs by copying the jobs directory located in JENKINS_HOME/jobs to another location.
+
+rsync command:
+1. rsync -a -r -p -A -X -o -g -t -a -v -h -z --progress --delete --exclude=logs --exclude=workspace --exclude=microservice --exclude=scm-sync-configuration -e ssh /var/lib/jenkins/. root@$HOST:/var/lib/jenkins ) >> /tmp/RSYNCLog-$time.log 2>&1
+2. rsync -a -r -p -A -X -o -g -t -a -v -h -z --progress -e ssh /etc/sysconfig/jenkins root@$HOST:/etc/sysconfig/jenkins
+3. 
+
 ```
 7. shared libraries in jenkins?
 8. how do we define shared libraries?
