@@ -25,6 +25,7 @@ sync_code:
     - git checkout main
     - git pull origin main
     - git push https://${ENV_TARGET_GIT_USER}:${ENV_TARGET_GIT_TOKEN}@git.dac.nokia.com/nod/oss-mediator-deployments.git main:main
+  when: on_success
   only:
     - main
 
