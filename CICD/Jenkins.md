@@ -68,6 +68,27 @@ Q). What is the deployment and cicd flow in your current company ?
 Release tag is first applied to small DCs, and the next day it is applied to big DCs.
 ```
 Q). What is shared libraries in jenkins? and How are shared libraries written?
+```
+Shared Libraries in Jenkins are a way to centralize and reuse common pipeline code across multiple Jenkinsfiles or jobs. Instead of duplicating functions or pipeline logic in each job, you can write that logic once in a shared library and call it from any pipeline. The functions to be used in share library are defined first in vars folder in repo. Then in jenkins  Global Shared Library (for all pipelines):
+- Go to Manage Jenkins → Configure System
+- Scroll to Global Pipeline Libraries
+- Add the library details (branch, repo url, retrival method scm)
+OR, folder level libraries can also be created, i.e, pipelines under the same folders can use it.
+
+Click Add
+```
+```
+(root of Git repo)
+├── vars/
+│   └── myPipeline.groovy       ← Scripted steps callable in Jenkinsfile
+├── src/
+│   └── org/
+│       └── myorg/
+│           └── utils.groovy    ← Groovy classes & helper functions
+├── resources/
+│   └── someTemplate.txt        ← Templates or configs
+└── README.md
+```
 
 Q). What is typical structure of shared libraries ?
 
