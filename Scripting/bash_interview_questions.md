@@ -42,6 +42,12 @@ while IFS=, read -r c1, c2, c3; do
   echo "column1=c1, column2=c2, column3=c3"
 done < filename.csv
 ```
+to read and print each line - 
+```
+while IFS= , read -r line; do
+  echo "$line"
+done
+```
 
 Q) What is crontab in Linux ? Provide an example ?
 ```
