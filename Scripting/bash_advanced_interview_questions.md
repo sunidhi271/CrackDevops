@@ -65,4 +65,32 @@ else
   echo "VAR is set to $VAR"
 fi
 ```
+Q) How to compress and decompress a file ?
+```
+To decompress: tar -xvzf archive.tar.gz
+To compress: tar -czf archve.tar.gz /root/test/bashscripts
+```
 
+Q) How to you manage process runnig in background in bash script ?
+```
+# Use & to run a command in background
+sudo service jenkins status &
+pid=$!
+
+wait $pid
+echo "The process is complete."
+```
+
+Q) How to create a temporary file in shell script ?
+```
+tempfile=${mktemp}
+echo "Random name assigned to the temp file: ${tempfile}"
+echo "Some data" > $tempfile
+rm -f $tempfile
+```
+
+Q) How do you parse json data in shell script ?
+```
+json='{"name": "sunidhi", "age": 28}'
+name=$(echo $json | jq -r '.name')
+```
