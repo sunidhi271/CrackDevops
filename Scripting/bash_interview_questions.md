@@ -9,6 +9,11 @@ for i in {1..100}; do
   fi;
 done;
 ```
+Q) How to identify the list of process in linux machine ?
+```
+ps -ef | awk -F" " '{print $2, $8}'
+```
+
 Q) Write a script to print number of "S" in mississippi ?
 ```
 #!/bin/bash
@@ -23,6 +28,21 @@ Q) How do you debug shell script ?
 ```
 Add "set -x" as the first line of the script.
 ```
+Q) How to trap errors in shell script ?
+```
+Add "set -e" as the first line of the script and use "trap" before each command. If any command fails or returns a non zero status, the script exists immediately and trap command helps us to capture the o/p of failed command.
+
+#!/bin/bash
+set -e
+trap 'ls nafile.txt' ERR
+```
+Q) How to read data from a csv file ?
+```
+while IFS=, read -r c1, c2, c3; do
+  echo "column1=c1, column2=c2, column3=c3"
+done < filename.csv
+```
+
 Q) What is crontab in Linux ? Provide an example ?
 ```
 Crontab is a way to schedule recussing tasks/processes in linux.
@@ -84,11 +104,6 @@ logrotate can be used to manage linux machine or application logs.
 within a scheduled time we can recurringly zip the logs using logrotate.
 ```
 
-Q) How to identify the list of process in linux machine ?
-```
-ps -ef | awk -F" " '{print $2, $8}'
-```
-
 Q) How to check whether a file exists using a shell script ?
 ```
 #!/bin/bash
@@ -98,3 +113,40 @@ else
     echo "File doesnt exist"
 fi
 ```
+Q) How to redirect stdout and stderror to a file in shell scripting ?
+```
+- Use &> to redirect both stdout and stderr to a file. [e.g, ls nafile.text &> out.log]
+- Only stdout - echo "hello" > out.txt
+- Only stderr - <command> 2> error.log [e.g, ls nafile.txt 2> error.txt]
+```
+Q) How to check exit status of a command in your script ?
+```
+# checked by $?
+#!/bin/bash
+ls /home/ubuntu
+if [$? -eq 0]; then
+  echo "command is successful"
+else
+  echo "command is not succeddful"
+fi
+```
+
+Q) How to find and replace text inside a file ?
+```
+sed -i 's/one/ten/g' filename
+```
+
+Q) How to take user input in bash scripting ?
+```
+#!/bin/bash
+echo "Enter your name:"
+read name
+echo "Hello $name"
+```
+
+Q) How to print current data and time in shell script ?
+```
+current_date=${date}
+```
+
+Q)  
