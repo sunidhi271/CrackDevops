@@ -12,8 +12,7 @@
 | `"$@"`                          | **All arguments (individually quoted)**        | `for i in "$@"; do ...`             | Handles arguments with spaces correctly     |        |   |        |                         |
 | `"$*"`                          | **All arguments as a single string**           | `echo "$*"`                         | Less safe with spaces                       |        |   |        |                         |
 | `&`                             | **Run in background**                          | `sleep 5 &`                         | Runs process in background                  |        |   |        |                         |
-| `&&`                            | **Run next command only if previous succeeds** | `cmd1 && cmd2`                      | Used for chaining                           |        |   |        |                         |
-| \`                              |                                                | \`                                  | **Run next command only if previous fails** | \`cmd1 |   | cmd2\` | Like: “if not, then...” |
+| `&&`                            | **Run next command only if previous succeeds** | `cmd1 && cmd2`                      | | **Run next command only if previous fails** | \`cmd1 |   | cmd2\` | Like: “if not, then...” |
 | `&>`                            | **Redirect both stdout and stderr**            | `cmd &> output.log`                 | Combines `> file 2>&1`                      |        |   |        |                         |
 | `>`                             | Redirect stdout                                | `ls > out.txt`                      | Overwrites file                             |        |   |        |                         |
 | `>>`                            | Append stdout                                  | `echo hello >> out.txt`             | Appends to file                             |        |   |        |                         |
