@@ -63,7 +63,10 @@ helm install myapp ./chart --set image.tag=$TAG
 
 Q: If you change only values.yaml, will helm diff show changes to the rendered output?
 ```
-Yes. helm diff upgrade compares the current release against the rendered output of the new values, so changes in values.yaml will reflect in the diff.
+Yes. helm diff upgrade - compares the current release against the rendered output of the new values, so changes in values.yaml will reflect in the diff.
+```
+```
+e.g: helm diff upgrade my-release ./my-chart --values my-values.yaml
 ```
 
  Q: What if a chart has a requirements.yaml file but no Chart.yaml dependencies block?
