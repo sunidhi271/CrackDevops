@@ -166,8 +166,21 @@ pipeline {
 ```
 
 # Troubleshooting Knowledge
-Q) Explain challenging CICD issues you fixed ?
+Q) Explain challenging CICD issues you fixed 
+```
+- Credential issues wrt to harbor token expiry
+- Agent ran out of space, implemented workspace clean (cleanWs()) as post actions of all pipeline.
+- Conflicting workspace folders for two different pipeline, then assigned dedicated separate nodes to separate pipelines.
+- Secret exposed in Logs (echo command was exposing the secret variable, handled by putting secrets in credentials)
+```
 
+Q) How to assign node to a pipeline ?
+```
+agent {
+  label agentA
+  customWorkspace "/var/jenkins_home/workspace/${env.JOB_NAME}_${env.BUILD_NUMBER}
+}
+```
 Q) How to debug a slow pipeline ?
 - Enable timestamps in log or manually log it:
 ```
@@ -186,7 +199,7 @@ pipeline {
 }
 ```
 - Check real time resource consumption by Jenkins agents. You can use jenkins node monitoring plugins, or htop etc to monitor nodes.
--  Check for Queuing Delays (lack of enough agents)
+- Check for Queuing Delays (lack of enough agents)
 - Check Logs for Errors or Warnings
 - Use Parallel Stages Where Possible
 
