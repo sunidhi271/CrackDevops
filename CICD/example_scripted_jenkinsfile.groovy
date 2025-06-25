@@ -2,14 +2,18 @@ library common
 library functions
 library admin
 
-node {
+node('TestApp') {
     timestamps()
     try {
         stage('Build') {
             echo 'Building...'
-            sh 'mkdir -p build && echo "Hello World" > build/output.txt'
+            sh 'mkdir -p build && cd build && echo "starting build.." > build/output.txt'
+            withCredentials([credentialId: 'registryCreds', username: 'USER', password: 'TOKEN']){
+                sh 'docker login https://registry.test.abc.com -u ${USER} -p ${TOKEN}'
+            }
+            sh 'docker build . -t testApp:{env.BUILD_NAME} > build/build-op.txt'
         }
-
+        
         stage('Archive Artifact') {
             archiveArtifacts artifacts: 'build/*.txt', allowEmptyArchive: true
         }
@@ -25,8 +29,10 @@ node {
     } finally {
         if (currentBuild.result == 'FAILURE') {
             echo "Pipeline failed. Please investigate."
+            cleanWs()
         } else {
             echo "✅ Pipeline succeeded."
+            cleanWs()
         }
     }
 }
