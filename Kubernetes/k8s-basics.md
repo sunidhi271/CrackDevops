@@ -57,7 +57,7 @@ Q: What are different types of Kubernetes Services ?
 ```
 1. CLUSTER-IP: exposes svc internally within cluster (curl http://<svc name>:80)
 2. Loadbalancer: To provision cloud based external load balancer (curl http://<External-IP>:80
-3. Node-Exporter: Exposes the service on a static port (30000-32767) on each node’s IP. (curl http://<NodeIP>:80
+3. Nodeport: Exposes the service on a static port (30000-32767) on each node’s IP. (curl http://<NodeIP>:80
 ```
 Q: Can We Have Multiple ETCD Instances in a Kubernetes Cluster?
 ```
