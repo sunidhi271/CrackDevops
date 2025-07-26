@@ -59,3 +59,41 @@ docker network create test_bridge
 docker run -d --name nginx --network test_bridge -p 8080:80 nginx
 docker run -it --network test_bridge alpine sh -c "apk add curl && curl http://nginx"
 ```
+
+Q: How to override the entrypoint ?
+```
+- ENTRYPOINT can only be overridden with --entrypoint.
+- If ENTRYPOINT is shell form, Docker wraps it in /bin/sh -c.
+
+# Dockerfile
+FROM ubuntu
+ENTRYPOINT ["echo"]
+CMD ["Hello"]
+
+# Command to override entrypoint, echo with ls
+docker run --entrypoint ls myimage
+
+# Command to override cmd
+docker run myimage Hi
+
+# Command to override both entrypoint and cmd
+docker run --entrypoint ls myimage
+```
+
+Q: What happens when CMD and Entrypoint is not there ?
+✅ If **both missing** → Inherit from base image.  
+✅ If base also missing → Error: *No command specified*.  
+✅ `--entrypoint` overrides ENTRYPOINT.  
+✅ Args after image name override CMD.  
+
+| Case | ENTRYPOINT | CMD | Final Command Executed | Notes |
+|------|------------|-----|------------------------|--------|
+| 1 | ❌ None | ✅ Present | CMD as command | `CMD ["echo","Hello"]` → `echo Hello` |
+| 2 | ✅ Present | ❌ None | ENTRYPOINT only | `ENTRYPOINT ["echo"]` → runs `echo` (no args) |
+| 3 | ✅ Present | ✅ Present | ENTRYPOINT + CMD as args | `ENTRYPOINT ["echo"]`, `CMD ["Hello"]` → `echo Hello` |
+| 4 | ✅ Present | ✅ Present | Override CMD | `docker run myimage Hi` → `echo Hi` |
+| 5 | ✅ Present | ✅ Present | Override ENTRYPOINT | `docker run --entrypoint ls myimage /` → `ls /` |
+| 6 | ❌ None | ❌ None | Inherits from base image | If base image defines CMD/ENTRYPOINT → uses that; else error |
+| 7 | Base image has CMD | ❌ None | Uses base image CMD | `FROM ubuntu` → default CMD = `/bin/bash` |
+| 8 | Base image has ENTRYPOINT+CMD | ❌ None | Uses both from base | `FROM nginx` → runs nginx normally |
+| 9 | Override ENTRYPOINT only | --entrypoint used | Still uses CMD unless args passed | `docker run --entrypoint ls myimage` → `ls Hello` (if CMD=Hello) |
