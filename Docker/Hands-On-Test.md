@@ -24,7 +24,9 @@ Ans: docker stop $(docker ps -q)
 
 Q: How to prune unused resources?
 ```
-Ans: docker system prune --volumes
+Ans:
+# To delete all resources unused images/containers/networks excluding volumes: docker system prune -a 
+# To delete every unsed resources: docker system prune --volumes
 ```
 Q: How to remove all images?
 ```
