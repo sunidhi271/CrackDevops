@@ -82,6 +82,22 @@ docker run myimage Hi
 docker run --entrypoint ls myimage
 ```
 
+Q: Give command to delete dangling images, volumes and networks, in docker ?
+```
+| Command                  | What It Deletes                                                   | Example                  |
+| ------------------------ | ----------------------------------------------------------------- | ------------------------ |
+| `docker system prune`    | Unused containers, networks, dangling images                      | `docker system prune`    |
+| `docker system prune -a` | **All unused images** (including dangling) + stopped containers + unused networks + build cache | `docker system prune -a` |
+| `docker image prune`     | **Dangling images** only (untagged layers)                        | `docker image prune`     |
+| `docker image prune -a`  | **All unused images**                                             | `docker image prune -a`  |
+| `docker container prune` | All stopped containers                                            | `docker container prune` |
+| `docker volume prune`    | All unused volumes                                                | `docker volume prune`    |
+| `docker network prune`   | All unused networks                                               | `docker network prune`   |
+| `docker system prune -a --volumes | All unused and dangling images + stopped containers + build cache + unused n/w |    |
+| `docker rm -f $(docker ps -aq) | Removes all stopped and running containers forcefully       | docker rm -f $(docker ps -aq)
+| 
+```
+
 Q: What happens when CMD and Entrypoint is not there ?
 ✅ If **both missing** → Inherit from base image.  
 ✅ If base also missing → Error: *No command specified*.  
