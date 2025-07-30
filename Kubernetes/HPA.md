@@ -1,4 +1,4 @@
-<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/894e868e-b795-4f5a-86a3-e22b7cf23fc3" />Q: How to Auto-scale a Deployment using HPA?
+Q: How to Auto-scale a Deployment using HPA?
 ```
 # Create HPA
 kubectl autoscale deployment myapp --cpu-percent=50 --min=1 --max=5
