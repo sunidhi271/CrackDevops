@@ -48,3 +48,48 @@ ROLLBACK:
 - Kubeadm managed: etcdctl snapshot restore, and recreate the static manifests. 
 systemctl stop apiserver |etcdctl snapshot restore /backup/etcd-$(date).db --data-dir=/var/lib/etcd-backup | systemctl restart etcd | systemctl restart apiserver
 ```
+
+Q: A pod cannot reach an external service (e.g., google.com). How would you debug?
+```
+1. Check podip: k exec -ti pod -- ip addr ( to check whether CNI has assigned a proper ip to pod or not, podip should match cluster pod CIDR. podip missing indicates issue with CNI )
+2. Check default route: k exec -ti pod -- ip route show (A pod can only reach external addresses if it has a default route (0.0.0.0/0) pointing to the node’s virtual gateway. 
+  default route missing indicates issue with CNI not setting up the pod n/w)
+3. Check DNS is resolving inside the pod or not ? : k exec -ti pod -- nslookup google.com
+4. If DNS is resolving, check connectivity: k exec -ti pod -- curl -vvv https://google.com : If fails, check node's iptables, security group, network policies etc for outbound traffic.
+5. To check where exactly the traffic is getting blocked, we can see all its hops: tracerote google.com
+```
+
+Q: A service is running on port 8080 locally but isn’t reachable from outside. What might be wrong?
+```
+- Service is bound to 12.0.0.1 (loopback) not to 0.0.0.0
+- Firewall (iptables/nftables) blocking external traffic.
+- Check security groups
+```
+
+Q: In Kubernetes, pod-to-pod communication works on the same node but not across nodes. How would you debug?
+```
+- Check if CNI Plugin (Calico) is running or not 
+- Check node routes: ip route show → each pod subnet should be routable.
+```
+
+Q: How does NAT work in Linux (iptables)?
+```
+- Its set of rules that define incoming and outgoing traffic, Rules can be seen here: iptables -t nat -L -n -v
+SNAT (Source NAT): Changes source IP of outgoing packets (common for pods → internet).
+DNAT (Destination NAT): Changes destination IP of incoming packets (used in NodePort/Ingress).
+```
+
+Q: A DNS lookup is slow. How do you debug?
+```
+Check if CoreDNS pods (in k8s) are healthy.
+Check firewall rules blocking UDP/53 or TCP/53.
+```
+
+Q: What happens when you run curl http://example.com from a Linux host?
+```
+1. DNS resolution (/etc/resolv.conf, CoreDNS).
+2. TCP handshake to resolved IP: SYN → SYN-ACK → ACK.
+3. HTTP request sent.
+4. Response received.
+5. Connection closed (FIN/ACK or kept alive).
+```
