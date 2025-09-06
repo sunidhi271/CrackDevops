@@ -1,0 +1,50 @@
+Q. What is SLI and SLO in monitoring and how to define SLI and SLO and project it in Grafana dashboard ?
+Ans: 
+```
+Service level - indicator, objective and Agreement. 
+SLI: A quantitative measure(Actual Metric) of some aspect of the service’s performance. Eg. Pod uptime, % of requests under 100s to measure latency, Incoming data per hour, 
+SLO: An Acceptable target value or range of SLI (Threshold of a metric). 99.9% the service should be up, 99.5% requests should be reachable within 100s,
+SLA: What you promise customers (e.g., 99.5% availability per month, or we give service credits).
+
+To create Grafana dashboard:
+Pannel 1 - SLI: Shows actual measurements
+- Calculate % of successful requests: (sum(rate(http_requests_total{status=~"2.."}[5m])) / sum(rate(http_requests_total[5m]))) * 100
+Pannel 2 - SLO: Create a threshold (red line with 99%) on the gauge by hardcoding the target i.e 99.5%.
+```
+
+Q. How do you upgrade a k8s cluster ?
+Ans:
+```
+We use Talos-managed k8s cluster, so we follow below steps for control plane:
+1. Take etcd snapshot and save it in s3 or somewhere outside node: talosctl -n <controlplane-ip> etcd snapshot db.snapshot
+2. Dry Run Upgrade: talosctl --nodes <controlplane-ip> upgrade-k8s --to <target-k8s-version> --dry-run
+3. Run Upgrade: talosctl -n <control-plane-ip> upgrade-k8s --to <target-k8s-version>
+Worker Nodes:
+- Talos upgrades both control plane and worker nodes in a coordinated way, when we run the above commands.
+```
+
+Q. If you have installed the k8s cluster, using kubeadm, then how would you upgrade ?
+```
+Incase kubeadm and kubelet binaries are handled manually then we have to first take etcd backup, then upgrade kubeadm, take backup of all the manifests running using velero,
+then upgrade kubelet, in control plane. In worker node, upgrade kubeadm, cordon and drain one node at a time, and upgrade kubelet and kubectl. 
+Control plane upgrade:
+- Check version compatibility with OS. Check the apiVesions changes, and update the manifests flags for apiVersions, Declare a downtime/annonce the upgrade.
+- ETCD Backup and store it externally: etcdctl snapshot save /backup/etc-$(date).db --endpoints=https//<> --ca-crt <path> --cert <path> --key <path>
+- Stop Apiserver: systemctl stop kube-apiserver
+- Plan Upgrade: sudo kubeadm upgrade plan
+- Install kubeadm: sudo apt-get upgrade && apt-get install kubeadm=<version> -y
+- Apply kubeadm upgrade (upgrades - apiserver, controller, scheduluer): sudo kubeadm upgrade apply <version>
+- Upgrade kubectl and restart kuelet: sudo apt-get install -y kubelet=<version> && sudo systemctl restart kubelet
+
+Worker Node:
+- Cordon the specific node: kubectl cordon <worker-node>
+- Drain the node: kubectl drain <worker-node> --ignore-daemonsets --delete-local-data
+- Install kubeadm: sudo apt-get install -y kubeadm=<version>
+- Upgrade node: sudo kubeadm upgrade node
+- Install kubelet: sudo apt-get install -y kubelet=<version> && sudo systemctl restart kubelet
+
+ROLLBACK: 
+- Taolos-managed: talosctl bootstrap --recover-from=<snapshot>
+- Kubeadm managed: etcdctl snapshot restore, and recreate the static manifests. 
+systemctl stop apiserver |etcdctl snapshot restore /backup/etcd-$(date).db --data-dir=/var/lib/etcd-backup | systemctl restart etcd | systemctl restart apiserver
+```
