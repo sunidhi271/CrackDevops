@@ -93,3 +93,34 @@ Q: What happens when you run curl http://example.com from a Linux host?
 4. Response received.
 5. Connection closed (FIN/ACK or kept alive).
 ```
+
+Q: What is that command to check whether some tcp port is opened in the node or not ?
+1. ss -tulpn | grep <port>
+```
+-t → TCP
+-u → UDP
+-l → listening sockets
+-p → show process
+-n → numeric ports (not names)
+```
+2. To get n/w statistics (what ports are open and who uses them ?): netstat -tulpn | grep <port>
+3. To check which port is mapped to which process - `lsof -i :<port>`
+
+Q: What is a listening socket ?
+```
+A socket is an endpoint for communication (IP + Port + Protocol) and a listening socket is the socket of a service (jenkins, kafka, nginx, mysql) that is waiting for connection, 
+but not yet connected to any client.
+example: LISTEN 0  128  0.0.0.0:8080  0.0.0.0:*  users:(("nginx",pid=1234,fd=6))
+Established socket is the one where client connection has already got established.
+Closed socket, the connection to the client, or traffic from the client has stopped.
+```
+
+Q: How to check reachablity of a ip from another node ?
+```
+netcat command: nc -zv <node-ip> <port>
+This is a quick way to check connectivity b/w two nodes, or to transfer a file or to connect to remote host:port. Basically, can I Actually connect to that port of the remote ip.
+```
+
+Q: Difference b/w netcat and netstat ?
+netstat → shows the state of local network sockets (passive, “what is running here?”). Used when you want to check if a service is listening locally.
+netcat → lets you actively interact with sockets (active, “can I reach/connect/send/receive?”). Used when you want to check if that service is reachable (locally or remotely) ?
