@@ -10,15 +10,29 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_vpc" "test" {
-  cidr_block = "10.0.0.0/16"
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
+}
+variable "ami_id" {
+  description = "EC2 AMI ID"
+  type        = string
+}
+provider "aws_region" {
+  region      = "us-east-1"
 }
 
-resource "aws_instance" "test-ec2" {
-  ami  = <get an image from EC2 UI>
-  aws_instance = "t2.micro"
+resource "aws_instance" "test_ec2" {
+  ami  = var.ami_id
+  aws_instance = var.instance_type
   subnet_id = "< get subnet-id from your VPC>"
   key_name = "<Go to EC2 --> keypairs --> create a keypair --> Copy the name of ket here>"
+}
+
+output "public_ip" {
+  description = "Public IP address of the EC2 instance"
+  value       = aws_instance.test_ec2.public_ip
 }
 ```
 4. Initialize terraform, for it to understand what it needs to do, by reading the code: `teraform init`
