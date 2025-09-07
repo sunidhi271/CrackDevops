@@ -124,3 +124,84 @@ This is a quick way to check connectivity b/w two nodes, or to transfer a file o
 Q: Difference b/w netcat and netstat ?
 netstat → shows the state of local network sockets (passive, “what is running here?”). Used when you want to check if a service is listening locally.
 netcat → lets you actively interact with sockets (active, “can I reach/connect/send/receive?”). Used when you want to check if that service is reachable (locally or remotely) ?
+
+Q: Give command to catch logs related to a specific date ?
+```
+kubectl logs <pod-name> --since=24h
+kubectl logs <pod-name> --since=2h
+kubectl logs <pod-name> | grep "2025-09-06"
+To get logs of previous pod of a restarted pod: k logs <pod-name> -p --since-time="2025-09-0600:00:00Z"
+--since-time - its for specific time
+--since - Its for relative time like 24h, 36h etc
+```
+
+Q: How would you implement Zero Downtime deployments in k8s cluster ?
+```
+1. Implement RollingUpdate Strategy in deployment
+2. Configure liveliness and readiness probe
+```
+
+Q: How do you implement alerting to reduce false positives?
+```
+- Reduce deduplication of metrics in prometheus
+- alerts based in SLOs not raw metrics, so that the alerts get triggered only when necessary.
+- multi-condition rules (CPU > 90% for 5 mins + error rate > 2%)
+```
+
+Q: How do two private subnets under the same VPC communicate?
+```
+By default they can communicate by using VPC's internalrouting table, as long as no security group rule is blocking the communication.
+```
+
+Q: What is NAT Gateway and when we need it ?
+```
+NAT Gateway allows private subnet resources to access the internet, while preventing the internet to initiate a traffic back.
+```
+
+Q: What is difference between s3 and EBS ?
+```
+s3: stores object storage. Has unlimited capacity. Accessible over HTTPS APIs. Used for storing backups, data lakes etc.
+EBS: stores block storage. It is tied to EC2 Instance, so limited storage. Latency is lower to access it. Used for databases, storage class in PVCs.
+```
+
+Q: How DNS works with Route53 ?
+```
+Route53 Maps human readable names/urls to IP address or resources like s3, ELB, EC2.
+Browser asks resolver for DNS mapping --> Route53 --> RETURNSc IP --> browser connects.
+```
+
+Q: What does "error budget" mean and how would you use it?
+```
+Error budget = 1 - SLO. If SLO is 99.9% for uptime then downtime allowed is 0.01%.
+If budget is already reached, then freeze releases, untill we make the svc/software more reliable.
+If budget is not reached, then allow faster releases.
+```
+
+Q: Difference between proactive monitoring and reactive monitoring.
+```
+Proactive Monitoring: Detect issues before they impact users (capacity forecasting, SLO based alerts)
+Reactive: Responding after an incident occurs (alerts on failures, troubleshooting realated metrics monitoring like CPU, PVC usage).
+```
+
+Q: How do you reduce MTTR (Mean Time to Recovery)?
+```
+- By implementing proactive alerts
+- Bring automation for common issue fixing.
+- Have monitoring dashboards that is helpful for basic initial troubleshooting.
+```
+
+Q: How do you approach Capacity Planning ?
+```
+- Check Historical data trends
+- Load testing
+- Tracking CPU , Memory usage, PVC usage projections.
+- For storage I use retention policies.
+```
+
+Q: Can you explain how to balance reliability vs. velocity (release speed)?
+```
+Too much focus on reliability → slows innovation.
+Too much velocity → risks instability.
+
+I use error budgets as the balancing tool: when we’re within budget, we ship features; when we exceed, we pause features and focus on reliability. This keeps both business and engineering aligned.
+```
