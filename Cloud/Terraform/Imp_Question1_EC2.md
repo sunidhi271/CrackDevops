@@ -4,26 +4,35 @@ Q) Create a EC2 instance in AWS using terraform ?
 2. Get AMI of an instance. Search EC2 in aws console --> select instances --> Click Launch Instance --> select Ubuntu/anything of your choice --> copy the AMI id written below.
 3. Login to cluster from local: aws configure
 - Give AWS Access key id and Secret. Give region, and give default o/p format as JSON.
-4. Write a tf file: main.tf
+4. Create a file for Variables: dev.tfvars
 ```
 variable "environment" {
   description = "Environment type"
   type        = string
   default     = "development"
 }
-
-provider "aws" {
-  region = "us-east-1"
-}
-
 variable "production_subnet_cidr" {
   type        = string
   default     = "10.0.1.0/24"
 }
-
 variable "development_subnet_cidr" {
   type        = string
   default     = "10.0.2.0/24"
+}
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
+}
+variable "ami_id" {
+  description = "EC2 AMI ID"
+  type        = string
+}
+```
+5. Write a tf file: main.tf
+```
+provider "aws" {
+  region = "us-east-1"
 }
 
 resource "aws_security_group" "example" {
@@ -35,19 +44,6 @@ resource "aws_security_group" "example" {
     protocol    = "tcp"
     cidr_blocks = var.environment == "production" ? [var.production_subnet_cidr] : [var.development_subnet_cidr]
   }
-}
-
-variable "instance_type" {
-  description = "EC2 instance type"
-  type        = string
-  default     = "t2.micro"
-}
-variable "ami_id" {
-  description = "EC2 AMI ID"
-  type        = string
-}
-provider "aws_region" {
-  region      = "us-east-1"
 }
 
 resource "aws_instance" "test_ec2" {
@@ -62,13 +58,13 @@ output "public_ip" {
   value       = aws_instance.test_ec2.public_ip
 }
 ```
-4. Initialize terraform, for it to understand what it needs to do, by reading the code: `teraform init`
+6. Initialize terraform, for it to understand what it needs to do, by reading the code: `teraform init`
 - Run it within the directory where you have .tf files
 - It installs the provider plugins.
 
-5. Dry-run the configuration: terraform plan
+7. Dry-run the configuration: terraform plan
 - Gives errors related to template, credentials errors etc.
 
-6. Apply the configurations: terraform apply -var-file=dev.tfvars
+8. Apply the configurations: terraform apply -var-file=dev.tfvars
 
 7. To delete the ec2 instance: terraform destroy
