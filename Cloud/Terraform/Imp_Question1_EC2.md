@@ -6,8 +6,35 @@ Q) Create a EC2 instance in AWS using terraform ?
 - Give AWS Access key id and Secret. Give region, and give default o/p format as JSON.
 4. Write a tf file: main.tf
 ```
+variable "environment" {
+  description = "Environment type"
+  type        = string
+  default     = "development"
+}
+
 provider "aws" {
   region = "us-east-1"
+}
+
+variable "production_subnet_cidr" {
+  type        = string
+  default     = "10.0.1.0/24"
+}
+
+variable "development_subnet_cidr" {
+  type        = string
+  default     = "10.0.2.0/24"
+}
+
+resource "aws_security_group" "example" {
+  name        = "example-sg"
+  description = "Example security group"
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = var.environment == "production" ? [var.production_subnet_cidr] : [var.development_subnet_cidr]
+  }
 }
 
 variable "instance_type" {
@@ -42,6 +69,6 @@ output "public_ip" {
 5. Dry-run the configuration: terraform plan
 - Gives errors related to template, credentials errors etc.
 
-6. Apply the configurations: terraform apply
+6. Apply the configurations: terraform apply -var-file=dev.tfvars
 
 7. To delete the ec2 instance: terraform destroy
