@@ -6,3 +6,4 @@ Why Terraform is a IaC tool ?
 
 Why to use Terraform if AWS CLI or AWS Cloud formation or Azure resource manager template we can do that ?
 - Because with Terraform we can create Infrastructure of any cloud, otherwise, we have to learn separate language for separate clouds. It Provides Muti Cloud support.
+
