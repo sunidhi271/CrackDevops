@@ -158,10 +158,11 @@ Q: What is NAT Gateway and when we need it ?
 NAT Gateway allows private subnet resources to access the internet, while preventing the internet to initiate a traffic back.
 ```
 
-Q: What is difference between s3 and EBS ?
+Q: What is difference between s3, RDS and EBS ?
 ```
 s3: stores object storage. Has unlimited capacity. Accessible over HTTPS APIs. Used for storing backups, data lakes etc.
-EBS: stores block storage. It is tied to EC2 Instance, so limited storage. Latency is lower to access it. Used for databases, storage class in PVCs.
+EBS(Elastic block service): stores block storage. It is tied to EC2 Instance, so limited storage. Latency is lower to access it. Used for databases, storage class in PVCs. only Durability and Availability of EBS is managed by AWS. 
+RDS(Relational Database Service): It is database service managed completely by AWS. So it can host any structured databases like postgresssql, MySQL, etc. AWS takecare of the replication, upgrade, availability, durability, reliability etc.
 ```
 
 Q: How DNS works with Route53 ?
